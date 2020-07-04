@@ -13,7 +13,7 @@ RUN apt-get -y update -qq && \
     libbz2-dev libpq-dev libproj-dev \
     postgresql-server-dev-12 postgresql-12-postgis-3 \
     postgresql-contrib postgresql-12-postgis-3-scripts \
-    apache2 php php-pgsql libapache2-mod-php \
+    apache2 php php-pgsql libapache2-mod-php \ 
     php-intl python3-setuptools python3-dev python3-pip \
     python3-psycopg2 python3-tidylib git curl sudo && \
     apt-get clean && \
@@ -33,7 +33,7 @@ RUN pip3 install osmium
 ENV NOMINATIM_VERSION v3.5.1
 RUN git clone --recursive https://github.com/openstreetmap/Nominatim ./src
 RUN cd ./src && git checkout tags/$NOMINATIM_VERSION && git submodule update --recursive --init && \
-    mkdir build && cd build && cmake .. && make
+    mkdir build && cd build && cmake .. && make -j`nproc`
 
 # Apache configure
 COPY local.php /app/src/build/settings/local.php
